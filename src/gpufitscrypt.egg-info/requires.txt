@@ -1,9 +1,0 @@
-astropy>=5.0
-cryptography>=41.0
-numpy>=1.24
-
-[dev]
-pytest>=7.0
-
-[gpu]
-pycuda>=2022.1

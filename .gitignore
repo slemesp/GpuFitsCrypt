@@ -1,0 +1,21 @@
+# Python byte-compiled / optimized
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Egg / dist info
+*.egg-info/
+dist/
+build/
+*.egg
+
+# CMake build artifacts
+cmake_build/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
