@@ -1,0 +1,23 @@
+Metadata-Version: 2.1
+Name: gpufitscrypt
+Version: 0.1.0
+Summary: GPU-accelerated AES-GCM authenticated encryption with parallel GHASH tree reduction for large-scale astronomical FITS catalogs
+Author: GpuFitsCrypt Contributors
+License: MIT
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Scientific/Engineering :: Astronomy
+Classifier: Topic :: Security :: Cryptography
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Provides-Extra: dev
+Provides-Extra: gpu
+
+# GpuFitsCrypt
+A High-Throughput AES-GCM Implementation on GPUs for Secure, Policy-Based Access to Massive Astronomical Catalogs
