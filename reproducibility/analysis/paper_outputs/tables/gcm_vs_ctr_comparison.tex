@@ -1,0 +1,27 @@
+\begin{table*}[t]
+\centering
+\caption{Performance scalability analysis comparing Large ($\approx 600 MB$) and Extra-Large ($\approx 3.4 GB$) FITS files. The table decomposes the total End-to-End (E2E) time into a baseline I/O component (\texttt{Astropy Time}) and the \texttt{Net GCM Cost} (calculated as E2E Time - Astropy Time). This isolation reveals that while I/O masks performance differences on smaller files, the \texttt{Net GCM Cost} scales effectively on datacenter hardware for larger workloads. \textit{Note: Consumer-grade and edge devices with limited VRAM (RTX 3060, 3050 Ti, and Jetson Orin) are excluded from the Extra-Large benchmark as the dataset size exceeds their available memory capacity.}}
+\label{tab:gcm_vs_ctr_comparison}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l c c c c c c}
+\toprule
+\textbf{GPU Model} & \textbf{Astropy Time} & \textbf{E2E CTR Time} & \textbf{E2E GCM Time} & \textbf{Net CTR Cost} & \textbf{Net GCM Cost} & \textbf{GCM/CTR Net Ratio} \\
+\midrule
+\textit{Large ($\approx 600 MB$)} \\
+H100 PCIe          & 0.104 & 0.462 & 1.304 & 0.358 & 1.200 & 3.35x \\
+A100               & 0.256 & 0.477 & 1.240 & 0.221 & 0.984 & 4.46x \\
+L40S               & 0.220 & 0.494 & 1.248 & 0.274 & 1.027 & 3.76x \\
+GeForce RTX 3090   & 0.359 & 0.495 & 1.238 & 0.136 & 0.879 & 6.45x \\
+GeForce RTX 3060   & 0.099 & 0.692 & 1.276 & 0.593 & 1.177 & 1.98x \\
+GeForce RTX 3050 Ti & 0.149 & 0.901 & 1.486 & 0.752 & 1.337 & 1.78x \\
+Jetson Orin        & 0.226 & 0.662 & 1.765 & 0.435 & 1.539 & 3.53x \\
+\midrule
+\textit{Extra-Large ($\approx 3.4 GB$)} \\
+H100 PCIe          & 0.731 & 2.727 & 7.743 & 1.997 & 7.012 & 3.51x \\
+A100               & 1.626 & 2.782 & 7.325 & 1.156 & 5.699 & 4.93x \\
+L40S               & 1.098 & 3.007 & 7.678 & 1.910 & 6.580 & 3.45x \\
+GeForce RTX 3090   & 0.978 & 2.875 & 7.099 & 1.897 & 6.121 & 3.23x \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

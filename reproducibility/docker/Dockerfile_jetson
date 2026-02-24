@@ -1,0 +1,32 @@
+FROM nvcr.io/nvidia/l4t-cuda:12.2.12-devel
+
+LABEL maintainer="samuel@lightbridges.es"
+LABEL description="Benchmark and reproducibility environment for GpuFitsCrypt on Jetson Orin"
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV CUDA_HOME=/usr/local/cuda
+ENV PATH=${CUDA_HOME}/bin:${PATH}
+ENV LD_LIBRARY_PATH=${CUDA_HOME}/lib64:/usr/lib/aarch64-linux-gnu/tegra:${LD_LIBRARY_PATH}
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential g++ make git wget libcfitsio-dev python3 python3-pip python3-venv pkg-config sudo \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt /tmp/requirements.txt
+RUN python3 -m pip install --no-cache-dir -r /tmp/requirements.txt tabulate pynvml nvtx
+
+# --- User Management for Permission Fix ---
+ARG USER_ID=1000
+ARG GROUP_ID=1000
+
+RUN groupadd -g ${GROUP_ID} appuser && \
+    useradd -m -u ${USER_ID} -g appuser -s /bin/bash appuser && \
+    echo "appuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+WORKDIR /app/src
+RUN chown -R appuser:appuser /app
+
+USER appuser
+ENV LD_LIBRARY_PATH=/app/src:${LD_LIBRARY_PATH}
+
+ENTRYPOINT ["python3", "reproducibility/benchmarks/main_runner.py"]

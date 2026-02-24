@@ -1,0 +1,94 @@
+# --- Build Artifacts ---
+*.o
+*.obj
+*.so
+*.so.*
+*.a
+*.lib
+*.dylib
+*.dll
+*.exe
+*.out
+*.app
+*.d
+*.gch
+*.pch
+
+# --- CUDA Artifacts ---
+*.i
+*.ii
+*.gpu
+*.ptx
+*.cubin
+*.fatbin
+
+# --- Python Artifacts ---
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+
+# --- IDE & System ---
+.idea/
+.vscode/
+.DS_Store
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Testing/
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps/
+CMakeUserPresets.json
+
+# --- Project Specific: Test & Validation Data ---
+*.fits
+*.csv
+*.prof
+*.log
+*.png
+*.pdf
+
+# Test Directories
+gcm_test_scenarios/
+ctr_test_scenarios/
+raw_encrypt_test/
+key_test_data/
+data_validation/
+encrypted_files/
+fits_input_files/
+recents/
+backup/
+dev/
+example_output/
+
+# Benchmark & Analysis Directories
+benchmark_plots*/
+benchmark_analysis_*/
+comparison_analysis*/
+datas/comparison_analysis*/
+datas/master_analysis/
+datas/paper_verification/
+
+# Compilation Directories
+obj_common/
+obj_param_*/
+
+# External / Submodules (if not tracked)
+GPUPhot/
+AES-BS-GPU/
+
+# Keys
+key_*.txt
+key.txt
+key2.txt
+
+# Executables generated during build/test
+main_test
+test_calc
+aes_64_4

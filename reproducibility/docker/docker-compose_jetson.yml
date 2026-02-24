@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  gpufitscrypt-bench-jetson:
+    build:
+      context: ../../
+      dockerfile: reproducibility/docker/Dockerfile_jetson
+      network: host
+      args:
+        USER_ID: ${UID:-1000}
+        GROUP_ID: ${GID:-1000}
+    container_name: gpufitscrypt_reproducibility_jetson
+    env_file: .env
+    
+    working_dir: /app/src
+    user: "${UID:-1000}:${GID:-1000}"
+    
+    network_mode: host
+    runtime: nvidia
+    shm_size: ${BENCH_SHM_SIZE:-4g}
+    ipc: host
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      stack: 67108864
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu, compute, utility]
+    
+    volumes:
+      - ../../:/app/src
+    
+    environment:
+      - BENCH_LIB_BASE_PATH=/app/src
+      - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES:-all}
+      - LD_LIBRARY_PATH=/app/src
+      - HOME=/home/appuser

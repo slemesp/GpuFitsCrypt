@@ -1,0 +1,25 @@
+\begin{table}[t]
+\centering
+\caption{Kernel-optimal parameters (\texttt{TS}: Thread Size, \texttt{R}: Repeat Blocks) and execution time for AES-GCM on the large FITS dataset ($\approx 600$~MB). Note that for this workload size, the execution time on Datacenter GPUs (H100, A100) is dominated by kernel launch latency rather than computational throughput, resulting in times comparable to consumer cards.}
+\label{tab:optimal_kernel_configs}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{l c c c}
+\toprule
+\textbf{GPU Model} & \textbf{Opt. TS} & \textbf{Opt. R} & \textbf{Kernel Time (s)} \\
+\midrule
+\textit{Datacenter / HPC} \\
+H100 PCIe & 128 & 4 & 0.037 $\pm$ 0.000 \\
+A100 & 256 & 8 & 0.054 $\pm$ 0.004 \\
+L40S & 64 & 64 & 0.055 $\pm$ 0.001 \\
+\midrule
+\textit{Consumer / Workstation} \\
+GeForce RTX 3090 & 64 & 64 & 0.066 $\pm$ 0.002 \\
+GeForce RTX 3060 & 64 & 2048 & 0.039 $\pm$ 0.000 \\
+GeForce RTX 3050 Ti & 64 & 1024 & 0.031 $\pm$ 0.001 \\
+\midrule
+\textit{Edge} \\
+Jetson Orin & 256 & 256 & 0.088 $\pm$ 0.000 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
