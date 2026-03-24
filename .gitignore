@@ -83,6 +83,9 @@ obj_param_*/
 GPUPhot/
 AES-BS-GPU/
 
+# Local notes
+TODO.md
+
 # Keys
 key_*.txt
 key.txt

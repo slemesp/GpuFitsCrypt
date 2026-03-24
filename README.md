@@ -58,12 +58,17 @@ For detailed technical information, please refer to the following resources:
 
 ## Scientific Validation
 
-The library has been rigorously validated using **GPUPhot**, a high-performance photometry package. Validation tests confirm:
+The library has been rigorously validated using **[GPUPhot](https://github.com/Light-Bridges/GPUPhot)**, a high-performance photometry package. Validation tests confirm:
 1.  **Semantic Confidentiality**: Encrypted payloads are statistically indistinguishable from high-entropy noise (zero sources detected by extraction algorithms).
 2.  **Bit-Exact Integrity**: Decrypted images match the original input with zero residuals.
 3.  **Science Readiness**: Photometric parameters (FWHM, instrumental flux, and centroids) extracted from decrypted data are identical to those from the original data within machine precision.
 
-Detailed validation workflows can be found in `examples/scientific_validation.py`.
+The validation script supports three detection backends (GPUPhot > SEP > scipy) and works out of the box:
+
+```bash
+python3 examples/scientific_validation.py
+python3 examples/scientific_validation.py --input_fits /path/to/real_image.fits
+```
 
 ---
 
