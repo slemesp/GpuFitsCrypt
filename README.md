@@ -1,5 +1,7 @@
 # GpuFitsCrypt: High-Performance FITS Encryption Library
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19221710.svg)](https://doi.org/10.5281/zenodo.19221710)
+
 GpuFitsCrypt is a specialized C++/CUDA library designed for the secure, high-throughput encryption and decryption of astronomical FITS files. It implements the AES-128 standard in both GCM (Galois/Counter Mode) and CTR (Counter Mode) using a highly optimized bit-sliced approach on NVIDIA GPUs.
 
 The library introduces a Granular Access Control model, which allows for independent cryptographic keys for metadata (Header) and pixel data (Data). This enables flexible data sharing policies—such as metadata-only access during proprietary periods—without compromising the confidentiality or integrity of the scientific payload.
