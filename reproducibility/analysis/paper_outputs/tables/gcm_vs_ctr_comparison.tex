@@ -1,6 +1,6 @@
 \begin{table*}[t]
 \centering
-\caption{Performance scalability analysis comparing Large ($\approx 600 MB$) and Extra-Large ($\approx 3.4 GB$) FITS files. The table decomposes the total End-to-End (E2E) time into a baseline I/O component (\texttt{Astropy Time}) and the \texttt{Net GCM Cost} (calculated as E2E Time - Astropy Time). This isolation reveals that while I/O masks performance differences on smaller files, the \texttt{Net GCM Cost} scales effectively on datacenter hardware for larger workloads. \textit{Note: Consumer-grade and edge devices with limited VRAM (RTX 3060, 3050 Ti, and Jetson Orin) are excluded from the Extra-Large benchmark as the dataset size exceeds their available memory capacity.}}
+\caption{Performance scalability analysis comparing Large ($\approx 600 MB$) and Extra-Large ($\approx 3.4 GB$) FITS files. The table decomposes the total End-to-End (E2E) time into a baseline I/O component (\texttt{Astropy Time}) and the \texttt{Net GCM Cost} (calculated as E2E Time - Astropy Time). This isolation reveals that while I/O masks performance differences on smaller files, the \texttt{Net GCM Cost} scales effectively on datacenter hardware for larger workloads. \textit{Note: Consumer-grade and edge devices with limited VRAM (RTX 3060, RTX 3050 Ti, and Jetson Orin) are excluded from the Extra-Large benchmark as the dataset size exceeds their available memory capacity.}}
 \label{tab:gcm_vs_ctr_comparison}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{l c c c c c c}
@@ -8,19 +8,19 @@
 \textbf{GPU Model} & \textbf{Astropy Time} & \textbf{E2E CTR Time} & \textbf{E2E GCM Time} & \textbf{Net CTR Cost} & \textbf{Net GCM Cost} & \textbf{GCM/CTR Net Ratio} \\
 \midrule
 \textit{Large ($\approx 600 MB$)} \\
-H100 PCIe          & 0.104 & 0.462 & 1.304 & 0.358 & 1.200 & 3.35x \\
-A100               & 0.256 & 0.477 & 1.240 & 0.221 & 0.984 & 4.46x \\
-L40S               & 0.220 & 0.494 & 1.248 & 0.274 & 1.027 & 3.76x \\
-GeForce RTX 3090   & 0.359 & 0.495 & 1.238 & 0.136 & 0.879 & 6.45x \\
-GeForce RTX 3060   & 0.099 & 0.692 & 1.276 & 0.593 & 1.177 & 1.98x \\
-GeForce RTX 3050 Ti & 0.149 & 0.901 & 1.486 & 0.752 & 1.337 & 1.78x \\
-Jetson Orin        & 0.226 & 0.662 & 1.765 & 0.435 & 1.539 & 3.53x \\
+H100 PCIe          & 0.122 & 0.482 & 1.344 & 0.359 & 1.222 & 3.40x \\
+A100               & 0.242 & 0.523 & 1.293 & 0.281 & 1.051 & 3.74x \\
+L40S               & 0.200 & 0.563 & 1.406 & 0.363 & 1.206 & 3.32x \\
+GeForce RTX 3090   & 0.178 & 0.542 & 1.316 & 0.364 & 1.138 & 3.13x \\
+GeForce RTX 3060   & 0.101 & 0.711 & 1.296 & 0.611 & 1.196 & 1.96x \\
+GeForce RTX 3050 Ti & 0.123 & 0.932 & 1.513 & 0.809 & 1.390 & 1.72x \\
+Jetson Orin        & 0.225 & 0.698 & 1.738 & 0.473 & 1.513 & 3.20x \\
 \midrule
 \textit{Extra-Large ($\approx 3.4 GB$)} \\
-H100 PCIe          & 0.731 & 2.727 & 7.743 & 1.997 & 7.012 & 3.51x \\
-A100               & 1.626 & 2.782 & 7.325 & 1.156 & 5.699 & 4.93x \\
-L40S               & 1.098 & 3.007 & 7.678 & 1.910 & 6.580 & 3.45x \\
-GeForce RTX 3090   & 0.978 & 2.875 & 7.099 & 1.897 & 6.121 & 3.23x \\
+H100 PCIe          & 1.460 & 2.798 & 8.000 & 1.338 & 6.541 & 4.89x \\
+A100               & 1.393 & 3.005 & 7.601 & 1.612 & 6.208 & 3.85x \\
+L40S               & 1.715 & 3.310 & 7.945 & 1.595 & 6.230 & 3.91x \\
+GeForce RTX 3090   & 1.048 & 3.086 & 7.215 & 2.038 & 6.167 & 3.03x \\
 \bottomrule
 \end{tabular}%
 }

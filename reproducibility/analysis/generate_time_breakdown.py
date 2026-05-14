@@ -36,7 +36,7 @@ def process_data(csv_path, filter_regex):
     df = pd.read_csv(csv_path, low_memory=False)
     for col in [E2E_METRIC, KERNEL_METRIC]: df[col] = pd.to_numeric(df[col], errors='coerce')
     
-    df = df[(df['LibErrorCode'] == 0) & df['TestCaseID_Config'].str.contains('_gcm_', case=False)].copy()
+    df = df[(df['LibErrorCode'] == 0) & (df['LibWarningCode'] != 2) & df['TestCaseID_Config'].str.contains('_gcm_', case=False)].copy()
     df.dropna(subset=[E2E_METRIC, KERNEL_METRIC], inplace=True)
     
     df = df[df['OriginalFile'].str.contains(filter_regex, case=False, regex=True)].copy()

@@ -361,6 +361,7 @@ GcmDecryptionResult gcmDecrypt(
     result.success = false;
     result.isAuthenticated = false;
     result.kernel_elapsed_ms = 0.0f;
+    result.ghash_kernel_elapsed_ms = 0.0f;
 
     if (nonce.size() != UTIL_NONCE_SIZE_BYTES || auth_tag_from_file.size() != 16) {
         GFC_LOG(GFC_LOG_LEVEL_ERROR, "GCM Decrypt: Incorrect Nonce or Auth Tag size.");
@@ -483,6 +484,14 @@ GcmDecryptionResult gcmDecrypt(
         int max_threads_per_block;
         cudaDeviceGetAttribute(&max_threads_per_block, cudaDevAttrMaxThreadsPerBlock, 0);
 
+        // GHashKernelOnly: brackets only the parallel GHASH reduction (Lee et al. 2025-comparable)
+        cudaEvent_t ghash_start = nullptr, ghash_stop = nullptr;
+        if (enable_kernel_timing) {
+            cudaEventCreate(&ghash_start);
+            cudaEventCreate(&ghash_stop);
+            cudaEventRecord(ghash_start, stream);
+        }
+
         if (num_ghash_input_blocks == 0) {
             cudaMemsetAsync(d_recalculated_ghash_result.get(), 0, 16, stream);
         } else if (num_ghash_input_blocks <= max_threads_per_block) {
@@ -521,6 +530,10 @@ GcmDecryptionResult gcmDecrypt(
                 d_H_power_last_chunk_ptr, grid_size);
         }
 
+        if (enable_kernel_timing) {
+            cudaEventRecord(ghash_stop, stream);
+        }
+
         // --- 5. TAG VERIFICATION AND FINAL DECRYPTION ---
         CudaManagedBuffer<uint8_t> d_recalculated_auth_tag(16, stream, "d_recalculated_auth_tag");
         xor_buffers_128bit_kernel<<<1, 16, 0, stream>>>(d_recalculated_auth_tag.get(),
@@ -538,6 +551,11 @@ GcmDecryptionResult gcmDecrypt(
             result.kernel_elapsed_ms = ms;
             cudaEventDestroy(start);
             cudaEventDestroy(stop);
+            float ghash_ms = 0;
+            cudaEventElapsedTime(&ghash_ms, ghash_start, ghash_stop);
+            result.ghash_kernel_elapsed_ms = ghash_ms;
+            cudaEventDestroy(ghash_start);
+            cudaEventDestroy(ghash_stop);
         } else {
             cudaStreamSynchronize(stream);
         }

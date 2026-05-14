@@ -47,7 +47,7 @@ def process_benchmark_data(df):
     for col in ["TotalOpenTime_s", KERNEL_BASE_TIME, "ThreadSizeBS", "RepeatBS", "OriginalFileSize_bytes"]:
         df[col] = pd.to_numeric(df[col], errors='coerce')
 
-    df = df[df['LibErrorCode'] == 0].copy()
+    df = df[(df['LibErrorCode'] == 0) & (df['LibWarningCode'] != 2)].copy()
     df.dropna(subset=required_cols, inplace=True)
 
     # Outlier removal (IQR)
@@ -65,7 +65,8 @@ def process_benchmark_data(df):
                 group = group[(group[col] >= lower) & (group[col] <= upper)]
         return group
 
-    df_cleaned = df.groupby(group_keys, as_index=False, group_keys=False).apply(remove_outliers).reset_index(drop=True)
+    result_indices = df.groupby(group_keys, group_keys=False).apply(remove_outliers).index
+    df_cleaned = df.loc[result_indices].reset_index(drop=True)
 
     stats = df_cleaned.groupby(group_keys).agg(
         Kernel_Time_Mean=(KERNEL_BASE_TIME, 'mean'),
@@ -85,6 +86,7 @@ def find_optimal_kernel_config(df_large, ts_r_limit=TS_R_LIMIT_DEFAULT):
     df = df_large.copy()
     df['TS_x_R'] = (df['ThreadSizeBS'] * df['RepeatBS']).astype(int)
     df = df[df['TS_x_R'] <= int(ts_r_limit)].copy()
+    df = df[df['Kernel_Time_Mean'] > 0].copy()
 
     optimal_configs = []
     for gpu_name, group in df.groupby('GPU_Name'):

@@ -38,13 +38,13 @@ def format_size(size_bytes):
 def find_best_times_per_gpu(df, mode_name):
     if df.empty: return pd.DataFrame()
     best_idx = df.loc[df.groupby('GPU_Name')[E2E_METRIC].idxmin()]
-    result = best_idx[['GPU_Name', E2E_METRIC, ASTROPY_METRIC]].copy()
+    result = best_idx[['GPU_Name', E2E_METRIC]].copy()
     result.rename(columns={E2E_METRIC: f'{mode_name.upper()}_Time_s'}, inplace=True)
     return result
 
 def generate_latex_table(results_by_size, output_file):
     size_descs = [f"{k.replace('_', '-').title()} ($\\approx {format_size(d['avg_size'])}$)" for k, d in results_by_size.items()]
-    caption = f"Performance scalability analysis comparing {' and '.join(size_descs)} FITS files. The table decomposes the total End-to-End (E2E) time into a baseline I/O component (\\texttt{{Astropy Time}}) and the \\texttt{{Net GCM Cost}} (calculated as E2E Time - Astropy Time). This isolation reveals that while I/O masks performance differences on smaller files, the \\texttt{{Net GCM Cost}} scales effectively on datacenter hardware for larger workloads. \\textit{{Note: Consumer-grade and edge devices with limited VRAM (RTX 3060, 3050 Ti, and Jetson Orin) are excluded from the Extra-Large benchmark as the dataset size exceeds their available memory capacity.}}"
+    caption = f"Performance scalability analysis comparing {' and '.join(size_descs)} FITS files. The table decomposes the total End-to-End (E2E) time into a baseline I/O component (\\texttt{{Astropy Time}}) and the \\texttt{{Net GCM Cost}} (calculated as E2E Time - Astropy Time). This isolation reveals that while I/O masks performance differences on smaller files, the \\texttt{{Net GCM Cost}} scales effectively on datacenter hardware for larger workloads. \\textit{{Note: Consumer-grade and edge devices with limited VRAM (RTX 3060, RTX 3050 Ti, and Jetson Orin) are excluded from the Extra-Large benchmark as the dataset size exceeds their available memory capacity.}}"
 
     lines = [
         r"\begin{table*}[t]",
@@ -83,7 +83,7 @@ def main():
     args = parser.parse_args()
 
     df_full = pd.read_csv(args.csv, low_memory=False)
-    df_full = df_full[df_full['LibErrorCode'] == 0].copy()
+    df_full = df_full[(df_full['LibErrorCode'] == 0) & (df_full['LibWarningCode'] != 2)].copy()
     
     results_by_size = {}
     for size_filter in [s.strip() for s in args.filter.split(',')]:
@@ -98,7 +98,9 @@ def main():
 
         if best_ctr.empty or best_gcm.empty: continue
 
-        comp = pd.merge(best_ctr.drop(columns=[ASTROPY_METRIC]), best_gcm, on='GPU_Name')
+        astropy_median = df_filtered.groupby('GPU_Name')[ASTROPY_METRIC].median().reset_index()
+        comp = pd.merge(best_ctr, best_gcm, on='GPU_Name')
+        comp = pd.merge(comp, astropy_median, on='GPU_Name')
         comp['Net_CTR_Cost_s'] = comp['CTR_Time_s'] - comp[ASTROPY_METRIC]
         comp['Net_GCM_Cost_s'] = comp['GCM_Time_s'] - comp[ASTROPY_METRIC]
         comp['Net_Cost_Ratio'] = comp['Net_GCM_Cost_s'].divide(comp['Net_CTR_Cost_s']).replace(float('inf'), 0)

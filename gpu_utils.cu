@@ -322,17 +322,6 @@ GpuWorkloadPointers launch_header_decryption_async(
         // Generate Keystream
         aes128_encrypt_gpu_repeat_coalesced<<<numBlocksGrid, threadSizeBS, 0, stream>>>(
             pointers.d_keystream, nullptr, pointers.d_aes_key_exp, pointers.d_nonce_packed);
-
-        // Apply XOR with keystream to decrypt
-        unsigned int xor_threads = 256;
-        unsigned int xor_blocks = (header_size_words + xor_threads - 1) / xor_threads;
-        xor_transposed_keystream_kernel<<<xor_blocks, xor_threads, 0, stream>>>(
-            (uint32_t *) pointers.d_io,
-            (const uint32_t *) pointers.d_io,
-            pointers.d_keystream,
-            header_size_words,
-            aes_grid_total_threads
-        );
     }
 
     if (enable_kernel_timing) {
@@ -343,6 +332,19 @@ GpuWorkloadPointers launch_header_decryption_async(
         pointers.kernel_elapsed_ms = ms;
         cudaEventDestroy(start);
         cudaEventDestroy(stop);
+    }
+
+    if (numBlocksGrid > 0) {
+        // Apply XOR with keystream to decrypt
+        unsigned int xor_threads = 256;
+        unsigned int xor_blocks = (header_size_words + xor_threads - 1) / xor_threads;
+        xor_transposed_keystream_kernel<<<xor_blocks, xor_threads, 0, stream>>>(
+            (uint32_t *) pointers.d_io,
+            (const uint32_t *) pointers.d_io,
+            pointers.d_keystream,
+            header_size_words,
+            aes_grid_total_threads
+        );
     }
 
     // 6. Copy result directly to host output buffer (Device -> Host)
@@ -430,7 +432,19 @@ GpuWorkloadPointers launch_data_decryption_async(
         // 5a. Generate Keystream
         aes128_encrypt_gpu_repeat_coalesced<<<numBlocksGrid, threadSizeBS, 0, stream>>>(
             pointers.d_keystream, nullptr, pointers.d_aes_key_exp, pointers.d_nonce_packed);
+    }
 
+    if (enable_kernel_timing) {
+        cudaEventRecord(stop, stream);
+        cudaEventSynchronize(stop);
+        float ms = 0;
+        cudaEventElapsedTime(&ms, start, stop);
+        pointers.kernel_elapsed_ms = ms;
+        cudaEventDestroy(start);
+        cudaEventDestroy(stop);
+    }
+
+    if (numBlocksGrid > 0) {
         // 5b. Decrypt with XOR
         unsigned int xor_threads = 256;
         unsigned int xor_blocks = (data_size_words + xor_threads - 1) / xor_threads;
@@ -454,16 +468,6 @@ GpuWorkloadPointers launch_data_decryption_async(
         size_t padding_offset = original_data_size;
         size_t padding_size = padded_data_size - original_data_size;
         cudaMemsetAsync((uint8_t *) pointers.d_io + padding_offset, 0, padding_size, stream);
-    }
-
-    if (enable_kernel_timing) {
-        cudaEventRecord(stop, stream);
-        cudaEventSynchronize(stop);
-        float ms = 0;
-        cudaEventElapsedTime(&ms, start, stop);
-        pointers.kernel_elapsed_ms = ms;
-        cudaEventDestroy(start);
-        cudaEventDestroy(stop);
     }
 
     // 6. Copy the final processed result (Device -> Host) directly to the output buffer

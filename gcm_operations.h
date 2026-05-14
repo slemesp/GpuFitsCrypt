@@ -21,7 +21,8 @@ struct GcmDecryptionResult {
     std::vector<uint8_t> plaintext;
     bool isAuthenticated = false; // The most important result: true if the tag matches
     bool success = false;
-    float kernel_elapsed_ms = 0.0f; // Kernel execution time in ms (if enabled)
+    float kernel_elapsed_ms = 0.0f;      // Full GCM pipeline (key H2D + AES + GHASH + tag)
+    float ghash_kernel_elapsed_ms = 0.0f; // GHASH kernels only (comparable to Lee et al. 2025)
 };
 
 /**

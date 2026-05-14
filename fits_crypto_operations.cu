@@ -280,6 +280,15 @@ bool encrypt_fits_file(
             GFC_LOG(GFC_LOG_LEVEL_INFO, "(FITS_OP) Input HDU contained no image data to encrypt.");
         }
 
+        // --- CHECKSUM: Primary HDU fully written; compute DATASUM and CHECKSUM ---
+        status = 0;
+        if (fits_write_chksum(fptr_out, &status)) {
+            fits_get_errstatus(status, err_text);
+            GFC_LOG(GFC_LOG_LEVEL_ERROR, "FITS: Error writing checksum for Primary HDU: %s", err_text);
+            throw std::runtime_error("FITS: Error writing CHECKSUM/DATASUM for Primary HDU");
+        }
+        GFC_LOG(GFC_LOG_LEVEL_DEBUG, "(FITS_OP) CHECKSUM/DATASUM written to Primary HDU.");
+
         // --- 6. Create BINTABLE Extension and Write Encrypted Data ---
         if (data_unit_total_bytes > 0) {
             GFC_LOG(GFC_LOG_LEVEL_DEBUG, "(FITS_OP) Creating BINTABLE extension for encrypted data...");
@@ -311,6 +320,14 @@ bool encrypt_fits_file(
             }
             GFC_LOG(GFC_LOG_LEVEL_DEBUG, "(FITS_OP) Encrypted data (%ld bytes) written to BINTABLE.",
                     data_unit_total_bytes);
+            // --- CHECKSUM: BinTableHDU fully written; compute DATASUM and CHECKSUM ---
+            status = 0;
+            if (fits_write_chksum(fptr_out, &status)) {
+                fits_get_errstatus(status, err_text);
+                GFC_LOG(GFC_LOG_LEVEL_ERROR, "FITS: Error writing checksum for BinTable HDU: %s", err_text);
+                throw std::runtime_error("FITS: Error writing CHECKSUM/DATASUM for BinTable HDU");
+            }
+            GFC_LOG(GFC_LOG_LEVEL_DEBUG, "(FITS_OP) CHECKSUM/DATASUM written to BinTable HDU.");
         } else {
             // If there is no data, do not create the BINTABLE extension. Primary HDU with NAXIS=0 is enough.
             GFC_LOG(GFC_LOG_LEVEL_DEBUG, "(FITS_OP) No image data to write to BINTABLE.");
@@ -640,6 +657,16 @@ bool encrypt_fits_file_gcm(
             }
             GFC_LOG(GFC_LOG_LEVEL_DEBUG, "(FITS_OP_GCM) AUTHTAG_D written using longstr.");
 
+            // --- CHECKSUM: Primary HDU fully written (AUTHTAG_D is the last keyword);
+            //     compute before fits_create_tbl changes the active HDU. ---
+            status = 0;
+            if (fits_write_chksum(fptr_out, &status)) {
+                fits_get_errstatus(status, err_text);
+                GFC_LOG(GFC_LOG_LEVEL_ERROR, "FITS: Error writing checksum for Primary HDU: %s", err_text);
+                throw std::runtime_error("FITS: Error writing CHECKSUM/DATASUM for Primary HDU");
+            }
+            GFC_LOG(GFC_LOG_LEVEL_DEBUG, "(FITS_OP_GCM) CHECKSUM/DATASUM written to Primary HDU.");
+
             // 5d. Create BINTABLE extension and write encrypted data
             GFC_LOG(GFC_LOG_LEVEL_DEBUG, "(FITS_OP_GCM) Creating BINTABLE extension for encrypted data...");
             int tfields = 1;
@@ -668,8 +695,25 @@ bool encrypt_fits_file_gcm(
             }
             GFC_LOG(GFC_LOG_LEVEL_DEBUG, "(FITS_OP_GCM) Encrypted data (%zu bytes) written to BINTABLE.",
                     data_encrypt_result.ciphertext.size());
+            // --- CHECKSUM: BinTableHDU fully written; compute DATASUM and CHECKSUM ---
+            status = 0;
+            if (fits_write_chksum(fptr_out, &status)) {
+                fits_get_errstatus(status, err_text);
+                GFC_LOG(GFC_LOG_LEVEL_ERROR, "FITS: Error writing checksum for BinTable HDU: %s", err_text);
+                throw std::runtime_error("FITS: Error writing CHECKSUM/DATASUM for BinTable HDU");
+            }
+            GFC_LOG(GFC_LOG_LEVEL_DEBUG, "(FITS_OP_GCM) CHECKSUM/DATASUM written to BinTable HDU.");
         } else {
             GFC_LOG(GFC_LOG_LEVEL_INFO, "(FITS_OP_GCM) Input HDU contained no image data to encrypt.");
+            // --- CHECKSUM: Primary HDU (no BinTable in no-data path) ---
+            status = 0;
+            if (fits_write_chksum(fptr_out, &status)) {
+                fits_get_errstatus(status, err_text);
+                GFC_LOG(GFC_LOG_LEVEL_ERROR, "FITS: Error writing checksum for Primary HDU (no-data): %s",
+                        err_text);
+                throw std::runtime_error("FITS: Error writing CHECKSUM/DATASUM for Primary HDU (no-data)");
+            }
+            GFC_LOG(GFC_LOG_LEVEL_DEBUG, "(FITS_OP_GCM) CHECKSUM/DATASUM written to Primary HDU (no-data path).");
         }
 
     } catch (const std::exception &e) {

@@ -1,0 +1,24 @@
+\begin{table*}[t]
+\centering
+\caption{Comparison of GpuFitsCrypt kernel-level throughput against prior GPU AES implementations from the literature. Throughput (Gbps) is kernel-only, excluding host-side I/O. GpuFitsCrypt values are GHASH-only medians over $N=200$ runs on the Large ($\approx$600\,MB) FITS dataset (TS256\_R4 configuration). Lee et al.\ \citeyearpar{lee_parallel_2025} values are for 16\,KB pre-staged messages; the measurement scope is equivalent (GHASH kernel only) but the input size differs. AAD: support for Associated Authenticated Data; FITS-aware: direct integration with the Astropy/cfitsio ecosystem.}
+\label{tab:literature_comparison}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l c c r c c}
+\toprule
+\textbf{Implementation} & \textbf{GPU} & \textbf{AES Mode} & \textbf{Throughput (Gbps)} & \textbf{AAD} & \textbf{FITS-aware} \\
+\midrule
+\textit{This work (GpuFitsCrypt)} \\
+GpuFitsCrypt & L40S & GCM (GHASH only) & 664 & $\checkmark$ & $\checkmark$ \\
+GpuFitsCrypt & H100 PCIe & GCM (GHASH only) & 541 & $\checkmark$ & $\checkmark$ \\
+GpuFitsCrypt & RTX 3090 & GCM (GHASH only) & 472 & $\checkmark$ & $\checkmark$ \\
+GpuFitsCrypt & A100-SXM4 & GCM (GHASH only) & 436 & $\checkmark$ & $\checkmark$ \\
+\midrule
+\textit{Prior GPU AES literature} \\
+\citet{lee_parallel_2025} & RTX 4090 & GCM (GHASH, 16\,KB) & 536 & $\checkmark$ & $\times$ \\
+\citet{lee_parallel_2025} & RTX 3090 & GCM (GHASH, 16\,KB) & 247 & $\checkmark$ & $\times$ \\
+\citet{lee_speed_2024} & RTX 3080 & CTR & 1623 & $\times$ & $\times$ \\
+\citet{tezcan_optimization_2021} & RTX 2070 Super & CTR & 879 & $\times$ & $\times$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

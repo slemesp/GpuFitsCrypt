@@ -38,6 +38,7 @@ class FitsOperationResult(ctypes.Structure):
         ("time_data_section_read_s", ctypes.c_double),
         ("time_data_decryption_gpu_s", ctypes.c_double),
         ("time_data_decryption_gpu_kernel_s", ctypes.c_double),
+        ("time_data_decryption_gpu_ghash_kernel_s", ctypes.c_double),
         ("time_header_processing_s", ctypes.c_double),
         ("time_final_assembly_s", ctypes.c_double),
     ]

@@ -1197,6 +1197,7 @@ static FitsOperationResult decrypt_fits_internal_gcm(
 
         std::vector<uint8_t> data_decrypted_bytes;
         float data_kernel_ms = 0.0f;
+        float data_ghash_kernel_ms = 0.0f;
         bool data_decryption_failed = false;
 
         if (data_original_size > 0 && p_d_aes_key_exp_data) {
@@ -1241,6 +1242,7 @@ static FitsOperationResult decrypt_fits_internal_gcm(
             } else {
                 data_decrypted_bytes.assign(data_res.plaintext.begin(), data_res.plaintext.end());
                 data_kernel_ms = data_res.kernel_elapsed_ms;
+                data_ghash_kernel_ms = data_res.ghash_kernel_elapsed_ms;
                 swap_endianness_if_needed_util(data_decrypted_bytes.data(), data_decrypted_bytes.size(), s_img_bitpix_orig_temp);
             }
         } else if (data_original_size > 0 && !p_d_aes_key_exp_data) {
@@ -1253,6 +1255,7 @@ static FitsOperationResult decrypt_fits_internal_gcm(
 
         if (enable_kernel_timing) {
             result.time_data_decryption_gpu_kernel_s = data_kernel_ms / 1000.0;
+            result.time_data_decryption_gpu_ghash_kernel_s = data_ghash_kernel_ms / 1000.0;
         }
 
         clock_gettime(CLOCK_MONOTONIC, &t_start_section);

@@ -37,6 +37,7 @@ typedef struct {
     double time_data_section_read_s; // Time to read encrypted data column (fits_read_col_byt).
     double time_data_decryption_gpu_s; // Time for GPU operations (kernels, DtoH transfers).
     double time_data_decryption_gpu_kernel_s; // Exclusive time for kernel execution on GPU (without transfers).
+    double time_data_decryption_gpu_ghash_kernel_s; // GCM only: GHASH kernels only (Lee et al. 2025-comparable).
     double time_header_processing_s; // Time to process/generate the final header.
     double time_final_assembly_s; // Time to allocate final memory and other assembly tasks.
 } FitsOperationResult;

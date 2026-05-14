@@ -24,7 +24,7 @@ except ImportError:
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(current_dir)
 from utils import get_library, FitsOperationResult, PROJECT_ROOT, setup_logger
-from compile_configs import COMPILE_CONFIGS_FULL, COMPILE_CONFIGS_REDUCED, COMPILE_CONFIGS_TEST
+from compile_configs import COMPILE_CONFIGS_FULL, COMPILE_CONFIGS_REDUCED, COMPILE_CONFIGS_TEST, COMPILE_CONFIGS_COMPARABLE
 
 logger = setup_logger("BenchmarkSuite")
 
@@ -44,6 +44,7 @@ MODES = ["ctr", "gcm"] if BENCH_MODE_ENV == "both" else [BENCH_MODE_ENV]
 BENCH_CONFIG_MODE = os.getenv("BENCH_CONFIG_MODE", "full").lower()
 if BENCH_CONFIG_MODE == "reduced": COMPILE_CONFIGS = COMPILE_CONFIGS_REDUCED
 elif BENCH_CONFIG_MODE == "test": COMPILE_CONFIGS = COMPILE_CONFIGS_TEST
+elif BENCH_CONFIG_MODE == "comparable": COMPILE_CONFIGS = COMPILE_CONFIGS_COMPARABLE
 else: COMPILE_CONFIGS = COMPILE_CONFIGS_FULL
 
 BENCH_C_LOG_LEVEL = int(os.getenv("BENCH_C_LOG_LEVEL", "0"))
@@ -161,7 +162,8 @@ def main():
                       "KeyH_Used", "KeyD_Used", "ThreadSizeBS", "RepeatBS", "RunNum",
                       "TotalOpenTime_s", "LibErrorCode", "LibWarningCode", "OutputBufferSize_bytes",
                       "CTime_Total_s", "CTime_OpenFITS_s", "CTime_ReadMeta_s", "CTime_HeaderProc_s",
-                      "CTime_DataRead_s", "CTime_DataDecryptGPU_s", "CTime_DataDecryptGPU_KernelOnly_s", "CTime_Assembly_s"]
+                      "CTime_DataRead_s", "CTime_DataDecryptGPU_s", "CTime_DataDecryptGPU_KernelOnly_s",
+                      "CTime_DataDecryptGPU_GHashKernelOnly_s", "CTime_Assembly_s"]
             csv_writer.writerow(header)
 
         for config in COMPILE_CONFIGS:
@@ -227,6 +229,7 @@ def main():
                             f"{res.time_data_section_read_s:.6f}",
                             f"{res.time_data_decryption_gpu_s:.6f}",
                             f"{res.time_data_decryption_gpu_kernel_s:.6f}",
+                            f"{res.time_data_decryption_gpu_ghash_kernel_s:.6f}",
                             f"{res.time_final_assembly_s:.6f}"
                         ]
                         csv_writer.writerow(csv_row)

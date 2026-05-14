@@ -4,6 +4,11 @@ COMPILE_CONFIGS_TEST = [
     {"TSBS": 64, "RBS": 4, "DESC": "TS64_R4"}
 ]
 
+# Single optimal config for Lee et al. 2025 comparable GHASH-only measurement
+COMPILE_CONFIGS_COMPARABLE = [
+    {"TSBS": 256, "RBS": 4, "DESC": "TS256_R4"},
+]
+
 COMPILE_CONFIGS_REDUCED = [
     # TS = 64
     {"TSBS": 64, "RBS": 4, "DESC": "TS64_R4"}, {"TSBS": 64, "RBS": 8, "DESC": "TS64_R8"},
