@@ -1,6 +1,7 @@
 # GpuFitsCrypt: High-Performance FITS Encryption Library
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19221710.svg)](https://doi.org/10.5281/zenodo.19221710)
+[![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.ascom.2026.101153-blue)](https://doi.org/10.1016/j.ascom.2026.101153)
 
 GpuFitsCrypt is a specialized C++/CUDA library designed for the secure, high-throughput encryption and decryption of astronomical FITS files. It implements the AES-128 standard in both GCM (Galois/Counter Mode) and CTR (Counter Mode) using a highly optimized bit-sliced approach on NVIDIA GPUs.
 
@@ -79,12 +80,13 @@ python3 examples/scientific_validation.py --input_fits /path/to/real_image.fits
 If you utilize GpuFitsCrypt in your research or infrastructure, please cite the following work:
 
 ```bibtex
-@article{lemes_gpufitscrypt_2025,
-  title={GpuFitsCrypt: High-Throughput Granular Encryption for Astronomical Archives},
-  author={Lemes-Perera, Samuel and Alarcon, Miguel R. and Caballero-Gil, Pino and Serra-Ricart, Miquel},
-  journal={Submitted to Astronomy & Computing},
-  year={2025},
-  note={GitHub Repository: https://github.com/slemes/GpuFitsCrypt}
+@article{lemes_gpufitscrypt_2026,
+  title={A High-Throughput AES-GCM Implementation on GPUs for Secure, Policy-Based Access to Massive Astronomical Catalogs},
+  author={Lemes-Perera, Samuel and Alarc{\'o}n, Miguel R. and Caballero-Gil, Pino and Serra-Ricart, Miquel},
+  journal={Astronomy and Computing},
+  year={2026},
+  doi={10.1016/j.ascom.2026.101153},
+  url={https://doi.org/10.1016/j.ascom.2026.101153}
 }
 ```
 
