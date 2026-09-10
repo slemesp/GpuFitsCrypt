@@ -2,6 +2,7 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19221710.svg)](https://doi.org/10.5281/zenodo.19221710)
 [![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.ascom.2026.101153-blue)](https://doi.org/10.1016/j.ascom.2026.101153)
+[![arXiv](https://img.shields.io/badge/arXiv-2602.23067-b31b1b.svg)](https://arxiv.org/abs/2602.23067)
 [![ascl:2603.021](https://img.shields.io/badge/ascl-2603.021-blue.svg?colorB=262255)](https://ascl.net/2603.021)
 [![Documentation Status](https://readthedocs.org/projects/gpufitscrypt/badge/?version=latest)](https://gpufitscrypt.readthedocs.io/en/latest/?badge=latest)
 
