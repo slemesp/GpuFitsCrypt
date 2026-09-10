@@ -8,7 +8,7 @@ sys.path.insert(0, os.path.abspath('../python'))
 project = 'GpuFitsCrypt'
 copyright = '2026, Samuel Lemes-Perera et al.'
 author = 'Samuel Lemes-Perera'
-release = '2.1.0'
+release = '2.1.1'
 
 # -- General configuration ---------------------------------------------------
 extensions = [
