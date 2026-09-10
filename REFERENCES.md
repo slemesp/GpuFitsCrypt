@@ -20,5 +20,10 @@ The fully parallelized GCM mode and the logarithmic-time GHASH reduction strateg
 > **ISSN:** 2405-9595  
 > **DOI:** [10.1016/j.icte.2025.01.006](https://doi.org/10.1016/j.icte.2025.01.006)
 
+## Astrophysics Source Code Library (ASCL)
+GpuFitsCrypt is registered and indexed in the Astrophysics Source Code Library:
+* **ASCL ID:** [ascl:2603.021](https://ascl.net/2603.021)
+* **NASA ADS Bibcode:** [2026ascl.soft03021L](https://ui.adsabs.harvard.edu/abs/2026ascl.soft03021L/abstract)
+
 ---
 *This library adapts these algorithms specifically for the FITS file format and astronomical data pipelines.*

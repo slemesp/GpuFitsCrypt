@@ -1,0 +1,56 @@
+cff-version: 1.2.0
+message: "If you use this software in your research, please cite both the Astronomy & Computing paper and the ASCL record."
+title: "GpuFitsCrypt: High-Performance FITS Encryption Library"
+abstract: "GpuFitsCrypt is a specialized C++/CUDA library designed for the secure, high-throughput encryption and decryption of astronomical FITS files. It implements the AES-128 standard in both GCM and CTR modes using an optimized bit-sliced approach on NVIDIA GPUs, featuring a Granular Access Control model for astronomical data pipelines."
+authors:
+  - family-names: "Lemes-Perera"
+    given-names: "Samuel"
+  - family-names: "Alarcón"
+    given-names: "Miguel R."
+  - family-names: "Caballero-Gil"
+    given-names: "Pino"
+  - family-names: "Serra-Ricart"
+    given-names: "Miquel"
+version: "2.1.1"
+date-released: "2026-09-10"
+license: "MIT"
+repository-code: "https://github.com/slemesp/GpuFitsCrypt"
+url: "https://gpufitscrypt.readthedocs.io/"
+identifiers:
+  - type: other
+    value: "ascl:2603.021"
+    description: "Astrophysics Source Code Library ID"
+  - type: other
+    value: "2026ascl.soft03021L"
+    description: "NASA ADS Bibcode"
+  - type: doi
+    value: "10.1016/j.ascom.2026.101153"
+    description: "Astronomy and Computing published article"
+  - type: doi
+    value: "10.5281/zenodo.19221710"
+    description: "Zenodo archive record"
+keywords:
+  - "astronomy"
+  - "astrophysics"
+  - "FITS"
+  - "cryptography"
+  - "AES-GCM"
+  - "GPU"
+  - "CUDA"
+  - "granular-access-control"
+preferred-citation:
+  type: article
+  authors:
+    - family-names: "Lemes-Perera"
+      given-names: "Samuel"
+    - family-names: "Alarcón"
+      given-names: "Miguel R."
+    - family-names: "Caballero-Gil"
+      given-names: "Pino"
+    - family-names: "Serra-Ricart"
+      given-names: "Miquel"
+  title: "A High-Throughput AES-GCM Implementation on GPUs for Secure, Policy-Based Access to Massive Astronomical Catalogs"
+  journal: "Astronomy and Computing"
+  year: 2026
+  doi: "10.1016/j.ascom.2026.101153"
+  url: "https://doi.org/10.1016/j.ascom.2026.101153"
