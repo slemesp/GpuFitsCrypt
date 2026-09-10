@@ -10,6 +10,7 @@ overview
 api_c
 api_python
 scientific_validation
+fits_convention
 references
 ```
 
@@ -19,4 +20,5 @@ references
 * **{doc}`api_c`**: Complete C/CUDA API reference, data structures, context management, and error codes.
 * **{doc}`api_python`**: Python bindings documentation (`gpufitscrypt`).
 * **{doc}`scientific_validation`**: Photometric integrity and validation tests using GPUPhot/SEP.
+* **{doc}`fits_convention`**: Formal FITS Encrypted Container and Granular Access Convention specification.
 * **{doc}`references`**: Academic papers, foundational algorithms, and citation information.
