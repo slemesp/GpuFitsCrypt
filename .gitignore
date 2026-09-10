@@ -30,6 +30,10 @@ __pycache__/
 venv/
 env/
 
+# --- Documentation Artifacts ---
+_build/
+docs/_build/
+
 # --- IDE & System ---
 .idea/
 .vscode/
